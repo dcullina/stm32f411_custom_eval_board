@@ -115,13 +115,6 @@ impl MPU6050 {
             .write_read(self.mpu_address, &[INT_STATUS], &mut int_status_buf)
             .unwrap();
         
-        // let interrupt_pending: bool = (0b0000_0001 & int_status_buf[0]) != 0;
-        // match interrupt_pending {
-        //     true => defmt::info!("Interrupt Received!"),
-        //     false => defmt::info!("No interrupt received yet..."),
-        // }
-        // defmt::info!("interrupt_status register: {:#010b}", int_status_buf[0]);
-        
     }
 
     pub fn get_temperature_data(&mut self) -> () {
