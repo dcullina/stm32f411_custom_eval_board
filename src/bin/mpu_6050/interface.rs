@@ -4,6 +4,13 @@ use stm32f4xx_hal::{
     timer::{self, Instance},
 };
 
+// #[derive(Debug)]
+// pub enum Mpu6050Error<E> {
+//     I2c(E),
+
+//     InvalidChipId(u8),
+// }
+
 
 const MASTER_CLOCK: u8 = 0b0000_1101;
 const ACCEL_SENSITIVITY: i16 = 16384;
@@ -44,7 +51,7 @@ impl MPU6050 {
         self.configure_dlpf();
         // self.set_sample_rate();
         self.clear_interrupt();
-        defmt::info!("Interface initialized mpu-6050!");
+        // defmt::info!("Interface initialized mpu-6050!");
     }
 
     // fn reset_device(&mut self) -> () {
@@ -66,7 +73,7 @@ impl MPU6050 {
             .write(self.mpu_address, &[PWR_MGMT_2, 0b0100_0000])
             .unwrap();
 
-        defmt::info!("Device awoken...")
+        // defmt::info!("Device awoken...")
         
     }
 
@@ -76,7 +83,7 @@ impl MPU6050 {
         self.i2c_interface
             .write(self.mpu_address, &[CONFIG, 0b0000_0011])
             .unwrap();
-        defmt::info!("DLPF configured...")
+        // defmt::info!("DLPF configured...")
 
     }
 
@@ -91,7 +98,7 @@ impl MPU6050 {
             .write(self.mpu_address, &[INT_ENABLE, 0b0000_0001])
             .unwrap();
 
-        defmt::info!("Data interrupt configured!");
+        // defmt::info!("Data interrupt configured!");
         
     }
 
@@ -117,7 +124,7 @@ impl MPU6050 {
         
     }
 
-    pub fn get_temperature_data(&mut self) -> () {
+    pub fn get_temperature_data(&mut self) -> f32 {
 
         let mut temp_buffer: [u8; 2] = [0u8; 2];
 
@@ -129,11 +136,13 @@ impl MPU6050 {
 
         let temp_phys: f32 = temp as f32 / 340.0 + 36.53;
 
-        defmt::info!("Current Temperature: {:?} degC", temp_phys);
+        temp_phys
+
+        // defmt::info!("Current Temperature: {:?} degC", temp_phys);
         
     }
 
-    pub fn get_accelerometer_data(&mut self) -> () {
+    pub fn get_accelerometer_data(&mut self) -> [f32; 3] {
 
         let mut acc_x_buffer: [u8; 2] = [0u8; 2];
         let mut acc_y_buffer: [u8; 2] = [0u8; 2];
@@ -155,11 +164,17 @@ impl MPU6050 {
         let acc_y_phys: f32 = acc_y as f32 * GRAVITY_ACCEL / ACCEL_SENSITIVITY as f32;
         let acc_z_phys: f32 = acc_z as f32 * GRAVITY_ACCEL / ACCEL_SENSITIVITY as f32;
 
-        defmt::info!("--- x: {:?} m/s^2 --- y: {:?} m/s^2 --- z: {:?} m/s^2 ---",
+        [
             acc_x_phys,
             acc_y_phys,
-            acc_z_phys
-        );
+            acc_z_phys,
+        ]
+
+        // defmt::info!("--- x: {:?} m/s^2 --- y: {:?} m/s^2 --- z: {:?} m/s^2 ---",
+        //     acc_x_phys,
+        //     acc_y_phys,
+        //     acc_z_phys
+        // );
 
     }
 }

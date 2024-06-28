@@ -1,6 +1,6 @@
-# `stm32-template`
+# STM32 Learning Sandbox
 
-> A template for building applications for STM32 microcontrollers
+Project built from [stm32 template](https://github.com/stm32-rs/stm32f4xx-hal)
 
 ## Dependencies
 

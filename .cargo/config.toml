@@ -1,11 +1,13 @@
-[target.'cfg(all(target_arch = "arm", target_os = "none"))']
+# [target.'cfg(all(target_arch = "arm", target_os = "none"))']
+[target.thumbv7em-none-eabihf]
 runner = "probe-rs run --chip STM32F411CEUx"
 
 rustflags = [
   # LLD (shipped with the Rust toolchain) is used as the default linker
-  "-C", "linker=flip-link",
+  # "-C", "linker=flip-link",
   "-C", "link-arg=-Tlink.x",
   "-C", "link-arg=-Tdefmt.x",
+  # "-C", "link-arg=--nmagic",
   # "-C", "link-arg=-Tstlog.x",
 
   # if you run into problems with LLD switch to the GNU linker by commenting out
