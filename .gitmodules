@@ -1,0 +1,3 @@
+[submodule "src/mpu6050"]
+	path = src/mpu6050
+	url = https://github.com/juliangaal/mpu6050/
