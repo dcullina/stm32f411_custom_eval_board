@@ -8,7 +8,7 @@
 // use rtic_control_testing as _;
 
 use panic_probe as _;
-use defmt_rtt as _;
+use defmt as _;
 use stm32f4xx_hal::otg_fs::{UsbBus, USB};
 // use mpu6050::*;
 
@@ -57,7 +57,7 @@ mod app {
     }
 
     #[init]
-    fn init(ctx: init::Context) -> (Shared, Local, init::Monotonics) {
+    fn init(ctx: init::Context) -> (Shared, Local) {
         let mut dp = ctx.device;
         let rcc = dp.RCC.constrain();
         let mut syscfg = dp.SYSCFG.constrain();
@@ -132,7 +132,7 @@ mod app {
                 mpu,
                 imu,
             },
-            init::Monotonics(),
+            // init::Monotonics(),
         )
     }
 
