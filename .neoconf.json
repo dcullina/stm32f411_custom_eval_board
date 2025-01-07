@@ -1,0 +1,19 @@
+{
+    "lspconfig": {
+        "rust_analyzer": {
+            "rust-analyzer": {
+                "cargo": {
+                    "target": "thumbv7em-none-eabihf"
+                },
+                "checkOnSave": {
+                    "overrideCommand": [
+                        "cargo",
+                        "check",
+                        "--target",
+                        "thumbv7em-none-eabihf"
+                    ]
+                }
+            }
+        }
+    }
+}

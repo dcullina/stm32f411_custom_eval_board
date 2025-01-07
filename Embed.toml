@@ -10,12 +10,10 @@ protocol = "Swd"
 # The speed in kHz of the data link to the target.
 # speed = 1337
 
+
 [default.flashing]
 # Whether or not the target should be flashed.
 enabled = true
-# Whether or not the target should be halted after reset.
-# DEPRECATED, moved to reset section
-halt_afterwards = false
 # Whether or not bytes erased but not rewritten with data from the ELF
 # should be restored with their contents before erasing.
 restore_unwritten_bytes = false
@@ -33,7 +31,7 @@ halt_afterwards = false
 
 [default.general]
 # The chip name of the chip to be debugged.
-chip = "STM32F411CEUx"
+chip = "STM32F411CE"
 # A list of chip descriptions to be loaded during runtime.
 chip_descriptions = []
 # The default log level to be used. Possible values are one of:
@@ -63,15 +61,15 @@ enabled = false
 #              String - Directly show output from the target 
 #              Defmt  - Format output on the host, see https://defmt.ferrous-systems.com/
 #              BinaryLE - Display as raw hex
-channels = [
-    # { up = 0, down = 0, name = "name", up_mode = "BlockIfFull", format = "Defmt" },
-]
+# channels = [
+#     # { up = 0, down = 0, name = "name", up_mode = "BlockIfFull", format = "Defmt" },
+# ]
 # The duration in ms for which the logger should retry to attach to RTT.
 timeout = 3000
 # Whether timestamps in the RTTUI are enabled
-show_timestamps = true
+# show_timestamps = true
 # Whether to save rtt history buffer on exit.
-log_enabled = false
+log_enabled = true
 # Where to save rtt history buffer relative to manifest path.
 log_path = "./logs"
 
@@ -79,4 +77,4 @@ log_path = "./logs"
 # Whether or not a GDB server should be opened after flashing.
 enabled = false
 # The connection string in host:port format wher the GDB server will open a socket.
-gdb_connection_string = "127.0.0.1:1337"
+gdb_connection_string = "localhost:1337"

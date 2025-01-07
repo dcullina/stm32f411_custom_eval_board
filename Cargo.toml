@@ -5,8 +5,9 @@ authors = ["Dylan Cullinane <dcullina@ucsd.edu>"]
 edition = "2021"
 
 [dependencies]
-cortex-m = "0.7.7"
+cortex-m = { version = "0.7.7", features = [ "critical-section-single-core" ]}
 defmt = "0.3.10"
+defmt-rtt = "0.4.1"
 mpu6050 = "0.1.6"
 panic-probe = "0.3.2"
 rtic = "2.1.2"
@@ -27,3 +28,6 @@ incremental = false
 debug = false
 lto = true
 opt-level = "s"
+
+[package.metadata.cargo-embed]
+linker_script = "memory.x"
