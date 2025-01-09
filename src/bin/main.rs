@@ -149,7 +149,7 @@ mod app {
             serial.lock(|serial| match serial.write(&[0x3a, 0x29]) {
                 Ok(_) => defmt::info!("Message sent!"),
                 Err(UsbError::WouldBlock) => defmt::error!("no data written, buffers full"),
-                Err(err) => defmt::error!("error occurred"),
+                Err(_) => defmt::error!("error occurred"),
             });
 
             // let mut buf = [0u8; 64];
