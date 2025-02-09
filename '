@@ -132,27 +132,72 @@ mod app {
         )
     }
 
-    #[idle(local = [led, delay], shared = [serial])]
+    #[idle(local = [led, delay], shared = [serial, usb_dev])]
     fn idle(ctx: idle::Context) -> ! {
         // Local
         let led = ctx.local.led;
         let delay = ctx.local.delay;
 
-        // Shared
-        let mut serial = ctx.shared.serial;
-
         // defmt::info!("Starting main loop");
 
         loop {
+            // usb_dev.lock(|usb_dev| match usb_dev.force_reset() {
+            //     Ok(()) => defmt::info!("usb reset!"),
+            //     Err(_) => defmt::warn!("usb failed to reset!"),
+            // });
             defmt::info!("BEEP");
             led.toggle();
             delay.delay_ms(2000);
             led.toggle();
             delay.delay_ms(2000);
 
-            serial.lock(|serial| {
-                let _ = serial.write(b"BEEP\n\r");
-            });
+            // (&mut serial, &mut usb_dev).lock(|serial, usb_dev| {
+            //     if usb_dev.poll(&mut [serial]) {
+            //         defmt::info!("YOSH!");
+            //         let mut buf = [0u8; 64];
+            //
+            //         match serial.read(&mut buf) {
+            //             Ok(count) if count > 0 => {
+            //                 let mut write_offset = 0;
+            //                 while write_offset < count {
+            //                     match serial.write(&mut buf[write_offset..count]) {
+            //                         Ok(len) if len > 0 => {
+            //                             write_offset += len;
+            //                         }
+            //                         _ => {}
+            //                     }
+            //                 }
+            //             }
+            //             _ => {}
+            //         }
+            //     }
+            // });
+
+            // (usb_dev, serial).lock(|usb_dev, serial| {
+            //     // if !usb_dev.poll(&mut [serial]) {
+            //     //     defmt::error!("failed");
+            //     //     return;
+            //     // }
+            //
+            //     if usb_dev.poll(&mut [serial]) {
+            //         defmt::info!("Poll Successful!");
+            //         match serial.write(&[0x3a, 0x29]) {
+            //             Ok(_) => defmt::info!("Message sent!"),
+            //             Err(UsbError::WouldBlock) => defmt::error!("no data written, buffers full"),
+            //             Err(_) => defmt::error!("error occurred"),
+            //         }
+            //     } else {
+            //         defmt::warn!("Poll Unsuccessful!");
+            //     }
+            // });
+
+            // let mut buf = [0u8; 64];
+            // if let Ok(count) = serial.lock(|serial| serial.read(&mut buf)) {
+            //     if count > 0 {
+            //         defmt::info!("\r\nUSB count greater than 0, writing \"yosh\"!!!");
+            //         serial.lock(|serial| serial.write(b"\r\nyosh\r\n")).ok();
+            //     }
+            // }
         }
     }
 
@@ -163,28 +208,38 @@ mod app {
 
         (serial, usb_dev).lock(|serial, usb_dev| {
             if usb_dev.poll(&mut [serial]) {
+                // match serial.write(&[0x3a, 0x29]) {
+                //     Ok(_) => defmt::info!("Message sent!"),
+                //     Err(UsbError::WouldBlock) => defmt::error!("no data written, buffers full"),
+                //     Err(_) => defmt::error!("error occurred"),
+                // }
+
                 let mut buf = [0u8; 64];
                 if let Ok(count) = serial.read(&mut buf) {
                     defmt::info!("{}", buf);
+                    // let _ = serial.flush();
+                    // let _ = serial.write(&buf[..count]);
                     buf.iter_mut().take(count).for_each(|b| {
                         b.make_ascii_uppercase();
                     });
                     if count > 0 {
-                        let _ = serial.write(b"\nReceived data!\n\r");
-                        let _ = serial.flush();
-                    }
-
-                    let mut wr_ptr = &buf[..count];
-                    while !wr_ptr.is_empty() {
-                        match serial.write(wr_ptr) {
-                            Ok(len) => {
-                                wr_ptr = &wr_ptr[len..];
-                                let _ = serial.flush();
-                            }
-                            Err(_) => break,
-                        }
+                        let _ = serial.write(b"Received data! ");
                     }
                 }
+                // match serial.read(&mut buf) {
+                //     Ok(count) if count > 0 => {
+                //         let mut write_offset = 0;
+                //         while write_offset < count {
+                //             match serial.write(&mut buf[write_offset..count]) {
+                //                 Ok(len) if len > 0 => {
+                //                     write_offset += len;
+                //                 }
+                //                 _ => {}
+                //             }
+                //         }
+                //     }
+                //     _ => {}
+                // }
             }
         });
     }
