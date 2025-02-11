@@ -1,6 +1,6 @@
 # [target.'cfg(all(target_arch = "arm", target_os = "none"))']
 [target.thumbv7em-none-eabihf]
-runner = "probe-rs run --chip STM32F411CE"
+runner = "probe-rs run --chip STM32F411CE --connect-under-reset"
 rustflags = [
 # "-C", "link-arg=--nmagic",
 "-C", "link-arg=-Tdefmt.x",
