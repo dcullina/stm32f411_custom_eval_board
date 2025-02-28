@@ -1,4 +1,5 @@
 /target
 .DS_Store
 .vscode
-.neoconf.json
+probe-rs.log
+coredump

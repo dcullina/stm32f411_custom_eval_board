@@ -1,7 +1,7 @@
 [package]
 name = "stm32_rtic_test_app"
 version = "0.1.0"
-authors = ["Dylan Cullinane <dcullina@ucsd.edu>"]
+authors = ["Dylan Cullinane <dylanjcullinane@icloud.com>"]
 edition = "2021"
 
 [dependencies]
